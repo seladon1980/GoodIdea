@@ -30,3 +30,17 @@ services:
       - .:/application
       - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
 
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    environment:
+      - APP_ENV=dev
+      - APP_BACKEND_URL=webserver:${API_PORT}
+      - APP_FRONTEND_PORT=40002
+    depends_on:
+      - php-fpm
+    ports:
+      - "40002:40002"
+    volumes:
+      - ./frontend:/app/src

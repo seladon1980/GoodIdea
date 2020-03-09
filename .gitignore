@@ -1,5 +1,3 @@
-
-###> symfony/framework-bundle ###
 /.env.local
 /.env.*.local
 /public/bundles/
@@ -7,4 +5,3 @@
 /vendor/
 .data/
 .idea/
-###< symfony/framework-bundle ###

@@ -8,5 +8,5 @@ Docker environment for a Symfony4 project
 //* bin/console doctrine:schema:update --force
 * php bin/console cache:clear
 
-# load fixture
+# load fixture (don't use)
 * php bin/console doctrine:fixtures:load
