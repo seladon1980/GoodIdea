@@ -18,7 +18,7 @@ class Posts extends Component {
                             checked={todo.status === 'completed'}
                         />
                         <label>
-                            {todo.title}
+                            {todo.title} ({todo.like})
                         </label>
                         <button className="destroy"  />
                     </div>
