@@ -1,75 +1,67 @@
-import fetch from "./fetch";
-
 export const SET_COOKIE = "SET_COOKIE";
 export const ADD_PROMISE = "ADD_PROMISE";
 export const REMOVE_PROMISE = "REMOVE_PROMISE";
-export const START_FETCHING_CARD = "START_FETCHING_CARD";
-export const FINISH_FETCHING_CARD = "FINISH_FETCHING_CARD";
-export const NAVIGATE = "NAVIGATE";
-
-function apiPath() {
-    return "http://localhost:8000";
-}
-
-function addPromise(promise) {
-    return {
-        type: ADD_PROMISE,
-        promise: promise
-    };
-}
-
-function removePromise(promise) {
-    return {
-        type: REMOVE_PROMISE,
-        promise: promise,
-    };
-}
-
-function startFetchingCard() {
-    return {
-        type: START_FETCHING_CARD
-    };
-}
-
-function finishFetchingCard(json) {
-    return {
-        type: FINISH_FETCHING_CARD,
-        cardData: json
-    };
-}
-
-function fetchCard() {
-    return (dispatch, getState) => {
-        dispatch(startFetchingCard());
-        let url = apiPath() + "/card/" + getState().page.cardSlug;
-        let promise = fetch(url, {}, dispatch, getState)
-            .then(response => response.json())
-            .then(json => {
-                dispatch(finishFetchingCard(json));
-                dispatch(removePromise(promise));
-            });
-        return dispatch(addPromise(promise));
-    };
-}
+export const START_FETCHING_POST = "START_FETCHING_POST";
+export const FINISH_FETCHING_POST = "FINISH_FETCHING_POST";
 
 export function fetchCardIfNeeded() {
     return (dispatch, getState) => {
         let state = getState().page;
-        if (state.cardData === undefined || state.cardData.slug !== state.cardSlug) {
+        if (state.blogData === undefined || state.blogData.slug !== state.postSlug) {
             return dispatch(fetchCard());
         }
     };
 }
 
-export function navigate(link, dontPushState) {
-    if (!isServerSide() && !dontPushState) {
-        history.pushState({
-            pathname: link.pathname,
-            href: link.href
-        }, "", link.href);
-    }
+function fetchCard() {
+    return (dispatch, getState) => {
+
+        dispatch(startFetchingCard());
+        let url = apiPath() + "/blog/" + getState().page.postSlug;
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(json => dispatch(finishFetchingCard(json)));
+    };
+
+}
+
+function startFetchingCard() {
     return {
-        type: NAVIGATE,
-        path: link.pathname
-    }
+        type: START_FETCHING_POST
+    };
+}
+
+function finishFetchingCard(json) {
+    return {
+        type: FINISH_FETCHING_POST,
+        postSlug: json.page,
+        blogData: json
+    };
+}
+
+function apiPath() {
+    return "http://localhost:8000";
+}
+
+export function navigate(page, next) {
+
+
+    return (dispatch, getState) => {
+
+        dispatch(startFetchingCard());
+
+        let page = parseInt(getState().page.postSlug);
+        if(next) {
+            page+=1;
+        } else  {
+            page-=1;
+        }
+
+        let url = apiPath() + "/blog/" + page;
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(json => dispatch(finishFetchingCard(json)));
+    };
 }

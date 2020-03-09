@@ -1,12 +1,28 @@
 import React from 'react'
-import {hydrate} from 'react-dom'
+import {render} from 'react-dom'
 import {Provider} from 'react-redux'
 import App from './components/app'
 import configureStore from './redux/configureStore'
 
-const store = configureStore(window.__STATE__);
+let initialState = {
+    page: {
+        type: "blog",
+        postSlug: 1
+    }
+};
+const m = /^\/blog\/([^\/]+)$/.exec(location.pathname);
+if (m !== null) {
+    initialState = {
+        page: {
+            type: "blog",
+            postSlug: m[1]
+        },
+    }
+}
 
-hydrate(
+const store = configureStore(initialState);
+
+render(
     <Provider store={store}>
         <App/>
     </Provider>,

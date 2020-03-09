@@ -1,5 +1,6 @@
 const path = require("path");
 
+// Конфиг клиента.
 clientConfig = {
   mode: "development",
   entry: {
@@ -11,9 +12,9 @@ clientConfig = {
   },
   module: {
     rules: [
-        { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
     ]
- }
+  }
 };
 
 serverConfig = {
@@ -28,9 +29,10 @@ serverConfig = {
   },
   module: {
     rules: [
-        { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
     ]
- }
+  }
 };
+
 
 module.exports = [clientConfig, serverConfig];

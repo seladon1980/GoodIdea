@@ -1,17 +1,18 @@
-export default function template(title, initialState, content) {
+
+export default function template(title) {
     let page = `
-        <!DOCTYPE html>
-        <html lang="en">
+        <!doctype html>
+            <html lang="en" data-framework="react">
             <head>
                 <meta charset="utf-8">
                 <title>${title}</title>
+               <link rel="stylesheet" href="/static/base.css">
+                <link rel="stylesheet" href="/static/index.css">
             </head>
             <body>
-                <div id="app">${content}</div>
-                <script>
-                   window.__STATE__ = ${JSON.stringify(initialState)}
-                </script>
+                <div class="todoapp" id="app"></div>
                 <script src="/dist/client.js"></script>
+                <script src="/dist/base.js"></script>
             </body>
         </html>
       `;
