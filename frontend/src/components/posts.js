@@ -7,7 +7,7 @@ class Posts extends Component {
     }
 
     render() {
-        const {page, data} = this.props;
+        const {data} = this.props;
         const todoItems = data.map(function (todo, k) {
             return (
                 <li key={todo.id}>
@@ -18,7 +18,7 @@ class Posts extends Component {
                             checked={todo.status === 'completed'}
                         />
                         <label>
-                            {todo.title}
+                            {todo.title} ({todo.like})
                         </label>
                         <button className="destroy"  />
                     </div>
