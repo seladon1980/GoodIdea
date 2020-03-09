@@ -50,7 +50,13 @@ class BlogController extends AbstractController
                 'page' => $page,
                 'limit' => 50,
                 'data' => array_map(function (BlogPost $item) {
-                    return $this->generateUrl('blog_by_id', ['id' => $item->getId()]);
+                    return [
+                        'id' =>  $item->getId(),
+                        'title' =>  $item->getTitle(),
+                        'status' =>  $item->getStatus(),
+                        'date' =>  $item->getCreatedAt(),
+                        'like' =>  $item->getLikesCount(),
+                    ];
                 }, $result)
             ]
         );
