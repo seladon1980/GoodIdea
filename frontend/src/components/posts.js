@@ -7,7 +7,7 @@ class Posts extends Component {
     }
 
     render() {
-        const {page, data} = this.props;
+        const {data} = this.props;
         const todoItems = data.map(function (todo, k) {
             return (
                 <li key={todo.id}>
