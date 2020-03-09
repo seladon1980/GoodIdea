@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\NamedQueries;
+use Doctrine\ORM\Mapping\NamedQuery;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BlogPostRepository")

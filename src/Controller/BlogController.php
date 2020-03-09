@@ -4,13 +4,15 @@ namespace App\Controller;
 
 
 use App\Entity\BlogPost;
+use App\Repository\BlogPostRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Flex\Response;
 
 /**
  * @Route("/blog")
@@ -20,23 +22,36 @@ class BlogController extends AbstractController
 
     /**
     * @Route("/{page}", name="blog_list", defaults={"page": 5}, requirements={"page"="\d+"})
-    * @param $page
-    * @param \Symfony\Component\HttpFoundation\Request $request
-    * @return \Symfony\Component\HttpFoundation\JsonResponse
-    */
-    public function list($page, Request $request)
+* @param $page
+* @param \Symfony\Component\HttpFoundation\Request $request
+* @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+* @param \Doctrine\ORM\EntityManagerInterface $em
+* @param \App\Repository\BlogPostRepository $blogPostRepository
+* @return \Symfony\Component\HttpFoundation\JsonResponse
+*/
+    public function list($page, Request $request,
+        SessionInterface $session,
+        EntityManagerInterface $em,
+        BlogPostRepository $blogPostRepository)
     {
-        $limit = $request->get('limit', 10);
-        $repository = $this->getDoctrine()->getRepository(BlogPost::class);
-        $items = $repository->findAll();
+
+        $query = $blogPostRepository->getOrderedArticles()
+            ->setFirstResult($page*50)
+            ->setMaxResults(50);
+
+        $paginator = new Paginator($query, $fetchJoinCollection = false);
+        $result = [];
+        foreach ($paginator as $post) {
+            $result[] = $post;
+        }
 
         return new JsonResponse(
             [
                 'page' => $page,
-                'limit' => $limit,
+                'limit' => 50,
                 'data' => array_map(function (BlogPost $item) {
                     return $this->generateUrl('blog_by_id', ['id' => $item->getId()]);
-                }, $items)
+                }, $result)
             ]
         );
     }

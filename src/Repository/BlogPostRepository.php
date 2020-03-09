@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\BlogPost;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +15,17 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class BlogPostRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BlogPost::class);
     }
+
+    public function getOrderedArticles($order = "ASC")
+    {
+        return $this->getEntityManager()
+        ->createQuery(
+            "SELECT a FROM App\Entity\BlogPost a ORDER BY a.likesCount  " . $order
+        );
+}
 
 }
