@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 
-import {navigate} from "../redux/actions";
+import {navigate, order} from "../redux/actions";
 
 import PostPage from "./postPage"
 
@@ -20,8 +20,12 @@ class App extends Component {
         this.props.dispatch(navigate(event, type));
     }
 
+    order(page, by, sort) {
+        this.props.dispatch(order(page, by, sort));
+    }
+
     render() {
-        const {pageType} = this.props;
+        const {pageType, order} = this.props;
         return (
             <div>
                 <header className="header">
@@ -30,6 +34,10 @@ class App extends Component {
                 {pageType === "blog" && <PostPage />}
                 <footer className="footer">
                     <ul className="filters">
+                        <span className="todo-count"
+                              onClick={event => this.order(event, 'like', order)}>
+						    <strong>По лайкам</strong>
+					    </span>
                         <li>
                             <a onClick={event => this.navigate(event, false)}>
                                 Назад
@@ -56,6 +64,7 @@ function mapStateToProps(state) {
     const {type} = page;
     return {
         pageType: type,
+        order: page.order
     };
 }
 

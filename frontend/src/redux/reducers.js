@@ -23,6 +23,8 @@ export default function root(state = {}, action) {
                     isFetching: false,
                     blogData: action.blogData,
                     postSlug: action.blogData.page,
+                    by: action.blogData.by,
+                    order: action.blogData.order
                 }
             };
     }

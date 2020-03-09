@@ -7,7 +7,9 @@ import configureStore from './redux/configureStore'
 let initialState = {
     page: {
         type: "blog",
-        postSlug: 1
+        postSlug: 1,
+        order: 'ASC',
+        by: 'id'
     }
 };
 const m = /^\/blog\/([^\/]+)$/.exec(location.pathname);
@@ -15,7 +17,9 @@ if (m !== null) {
     initialState = {
         page: {
             type: "blog",
-            postSlug: m[1]
+            postSlug: m[1],
+            order: 'ASC',
+            by: 'id'
         },
     }
 }
