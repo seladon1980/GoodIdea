@@ -36,6 +36,8 @@ function finishFetchingCard(json) {
     return {
         type: FINISH_FETCHING_POST,
         postSlug: json.page,
+        order: json.order,
+        by: json.by,
         blogData: json
     };
 }
@@ -45,21 +47,32 @@ function apiPath() {
 }
 
 export function navigate(page, next) {
-
-
     return (dispatch, getState) => {
-
         dispatch(startFetchingCard());
-
         let page = parseInt(getState().page.postSlug);
+        let order = parseInt(getState().page.order);
+        let by = parseInt(getState().page.by);
         if(next) {
             page+=1;
         } else  {
             page-=1;
         }
 
-        let url = apiPath() + "/blog/" + page;
+        let url = apiPath() + "/blog/" + page + "/?by="+by+"&order="+order;
+        return fetch(url)
+            .then(response => response.json())
+            .then(json => dispatch(finishFetchingCard(json)));
+    };
+}
 
+export function order(page, by, order) {
+    return (dispatch, getState) => {
+        dispatch(startFetchingCard());
+        let page = parseInt(getState().page.postSlug);
+
+        order=order==='ASC'?'DESC':'ASC';
+
+        let url = apiPath() + "/blog/" + page + "/?by="+by+"&order="+order;
         return fetch(url)
             .then(response => response.json())
             .then(json => dispatch(finishFetchingCard(json)));

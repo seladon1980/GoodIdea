@@ -20,12 +20,19 @@ class BlogPostRepository extends ServiceEntityRepository
         parent::__construct($registry, BlogPost::class);
     }
 
-    public function getOrderedArticles($order = "ASC")
+    public function getOrderedArticles($type, $order)
     {
+        if($type == 'like') {
+            return $this->getEntityManager()
+                ->createQuery(
+                    "SELECT a FROM App\Entity\BlogPost a ORDER BY a.likesCount  " . $order
+                );
+        }
         return $this->getEntityManager()
-        ->createQuery(
-            "SELECT a FROM App\Entity\BlogPost a ORDER BY a.likesCount  " . $order
-        );
+            ->createQuery(
+                "SELECT a FROM App\Entity\BlogPost a ORDER BY a.id  " . $order
+            );
+
 }
 
 }

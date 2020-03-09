@@ -22,20 +22,22 @@ class BlogController extends AbstractController
 
     /**
     * @Route("/{page}", name="blog_list", defaults={"page": 5}, requirements={"page"="\d+"})
-* @param $page
-* @param \Symfony\Component\HttpFoundation\Request $request
-* @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-* @param \Doctrine\ORM\EntityManagerInterface $em
-* @param \App\Repository\BlogPostRepository $blogPostRepository
-* @return \Symfony\Component\HttpFoundation\JsonResponse
-*/
+    * @param $page
+    * @param \Symfony\Component\HttpFoundation\Request $request
+    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+    * @param \Doctrine\ORM\EntityManagerInterface $em
+    * @param \App\Repository\BlogPostRepository $blogPostRepository
+    * @return \Symfony\Component\HttpFoundation\JsonResponse
+    */
     public function list($page, Request $request,
         SessionInterface $session,
         EntityManagerInterface $em,
         BlogPostRepository $blogPostRepository)
     {
 
-        $query = $blogPostRepository->getOrderedArticles()
+        $query = $blogPostRepository->getOrderedArticles(
+            $request->get('by', 'id'),
+            $request->get('order', 'ASC'))
             ->setFirstResult($page*50)
             ->setMaxResults(50);
 
@@ -49,6 +51,8 @@ class BlogController extends AbstractController
             [
                 'page' => $page,
                 'limit' => 50,
+                'order' => $request->get('order', 'ASC'),
+                'by' => $request->get('by', 'id'),
                 'data' => array_map(function (BlogPost $item) {
                     return [
                         'id' =>  $item->getId(),
