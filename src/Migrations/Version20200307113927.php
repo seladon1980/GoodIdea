@@ -15,19 +15,17 @@ final class Version20200307113927 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE TABLE blog_post (id SERIAL PRIMARY KEY, title VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, likes_count INT NOT NULL, status VARCHAR(255) NOT NULL)');
-        $this->addSql('
-        insert into blog_post (
+        $this->addSql('insert into blog_post (
     title, likes_count, created_at, status
 )
 select
     left(md5(i::text), 20),
     floor(random() * 20 + 1)::int,
-    timestamp \'2020-03-01 20:00:00\' +
-    random() * (timestamp \'2020-03-20 20:00:00\' -
-               timestamp \'2020-03-01 10:00:00\'),
+    i::timestamp,
     (array[\'new\', \'rejected\', \'in_progress\', \'completed\'])[floor(random() * 4 + 1)]
-from generate_series(1, 10000000) s(i)
-        ');
+from generate_series(timestamp \'2019-10-01 00:00\'
+                     , timestamp \'2020-03-01 24:00\'
+                     , interval  \'1 sec\') t(i);');
 
         $this->addSql('CREATE INDEX st_idx ON blog_post USING btree (status)');
         $this->addSql('CREATE INDEX lk_idx ON blog_post USING btree (likes_count)');

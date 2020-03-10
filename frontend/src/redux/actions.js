@@ -65,6 +65,31 @@ export function navigate(page, next) {
     };
 }
 
+
+export function destroy(event, id, data) {
+    return (dispatch, getState) => {
+        dispatch(startFetchingCard());
+
+        let state = data;
+        state.data = state.data.filter(function (candidate) {
+            return candidate.id !== id;
+        });
+
+        let url = apiPath() + "/blog/post/"+id;
+        return fetch(url, {
+            method: 'DELETE',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {'Content-Type': 'application/json',},
+            body: JSON.stringify({'id': id}),
+        }).then(response => response.json())
+            .then(json => dispatch(finishFetchingCard(state)));
+
+    };
+}
+
+
 export function order(page, by, order) {
     return (dispatch, getState) => {
         dispatch(startFetchingCard());
