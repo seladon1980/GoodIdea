@@ -44,18 +44,3 @@ services:
       - "40002:40002"
     volumes:
       - ./frontend:/app/src
-
-  client:
-    build:
-      context: frontend
-      dockerfile: Dockerfile
-    environment:
-      - APP_ENV=dev
-      - APP_BACKEND_URL=webserver:${API_PORT}
-      - APP_FRONTEND_PORT=40002
-    depends_on:
-      - php-fpm
-    ports:
-      - "40004:40004"
-    volumes:
-      - ./client:/app/src
