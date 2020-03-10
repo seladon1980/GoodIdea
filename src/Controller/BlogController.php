@@ -106,7 +106,7 @@ class BlogController extends AbstractController
         $em->remove($id);
         $em->flush();
 
-        return new JsonResponse(null, \Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
+        return new JsonResponse(['status' => 'ok']);
     }
 
 

@@ -10,3 +10,8 @@ Docker environment for a Symfony4 project
 
 # load fixture (don't use)
 * php bin/console doctrine:fixtures:load
+
+# TO DO
+* Optimization offset limit
+* Add swagger
+* Add JWT auth
