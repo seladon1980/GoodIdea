@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\BlogPost;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -18,6 +19,16 @@ class BlogPostRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BlogPost::class);
+    }
+
+    public function completedClear()
+    {
+        $query = $this
+            ->getEntityManager()
+            ->createQuery("
+DELETE FROM App\Entity\BlogPost a WHERE a.status = :status
+")->setParameter('status', \App\Entity\BlogPost::STATUS_COMPLETED);
+        return $query->execute();
     }
 
     public function getOrderedArticles($type, $order)

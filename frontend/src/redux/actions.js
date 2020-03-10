@@ -89,6 +89,30 @@ export function destroy(event, id, data) {
     };
 }
 
+export function completedClear(event, id, data) {
+    return (dispatch, getState) => {
+        dispatch(startFetchingCard());
+
+        let page = parseInt(getState().page.postSlug);
+        let order = getState().page.order;
+        let by = getState().page.by;
+
+        let url = apiPath() + "/blog/clear/";
+        return fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json',},
+            body: JSON.stringify({
+                'method': 'completedClear',
+                'order': order,
+                'by': by,
+                'page': page
+            }),
+        }).then(response => response.json())
+            .then(json => dispatch(finishFetchingCard(json)));
+
+    };
+}
+
 
 export function order(page, by, order) {
     return (dispatch, getState) => {
