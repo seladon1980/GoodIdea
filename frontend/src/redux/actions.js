@@ -46,12 +46,12 @@ function apiPath() {
     return "http://localhost:8000";
 }
 
-export function navigate(page, next) {
+export function navigate(p, next) {
     return (dispatch, getState) => {
         dispatch(startFetchingCard());
         let page = parseInt(getState().page.postSlug);
-        let order = parseInt(getState().page.order);
-        let by = parseInt(getState().page.by);
+        let order = getState().page.order;
+        let by = getState().page.by;
         if(next) {
             page+=1;
         } else  {
