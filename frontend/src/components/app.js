@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 
-import {navigate, order} from "../redux/actions";
+import {navigate, order, completedClear} from "../redux/actions";
 
 import PostPage from "./postPage"
 
@@ -22,6 +22,10 @@ class App extends Component {
 
     order(page, by, sort) {
         this.props.dispatch(order(page, by, sort));
+    }
+
+    completedClear(page) {
+        this.props.dispatch(completedClear(page));
     }
 
     render() {
@@ -50,8 +54,8 @@ class App extends Component {
                             </a>
                         </li>
                     </ul>
-                    <button className="clear-completed">
-                        Clear completed
+                    <button className="clear-completed" onClick={event => this.completedClear(event)}>
+                        Очистить завершенные
                     </button>
                 </footer>
             </div>

@@ -77,6 +77,50 @@ class BlogController extends AbstractController
     }
 
     /**
+     * @Route("/clear/", name="blog_clear", methods={"POST"})
+    * @param \Symfony\Component\HttpFoundation\Request $request
+    * @param \App\Repository\BlogPostRepository $blogPostRepository
+    * @return \Symfony\Component\HttpFoundation\JsonResponse
+    */
+    public function clear(Request $request, BlogPostRepository $blogPostRepository)
+    {
+        $content = json_decode($request->getContent(), true);
+        $page = $content['page'];
+        if($content['method'] == 'completedClear') {
+            $blogPostRepository->completedClear();
+        }
+        $query = $blogPostRepository->getOrderedArticles(
+            $content['by'],
+            $content['order'])
+            ->setFirstResult($page*50)
+            ->setMaxResults(50);
+
+        $paginator = new Paginator($query, $fetchJoinCollection = false);
+        $result = [];
+        foreach ($paginator as $post) {
+            $result[] = $post;
+        }
+
+        return new JsonResponse(
+            [
+                'page' => $page,
+                'limit' => 50,
+                'order' => $request->get('order', 'ASC'),
+                'by' => $request->get('by', 'id'),
+                'data' => array_map(function (BlogPost $item) {
+                    return [
+                        'id' =>  $item->getId(),
+                        'title' =>  $item->getTitle(),
+                        'status' =>  $item->getStatus(),
+                        'date' =>  $item->getCreatedAt(),
+                        'like' =>  $item->getLikesCount(),
+                    ];
+                }, $result)
+            ]
+        );
+    }
+
+    /**
      * @Route("/add", name="blog_add", methods={"POST"})
     * @param \Symfony\Component\HttpFoundation\Request $request
     * @return \Symfony\Component\HttpFoundation\JsonResponse
