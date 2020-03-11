@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {navigate, order, completedClear} from "../redux/actions";
 
 import PostPage from "./postPage"
+import PropTypes from "prop-types";
 
 class App extends Component {
 
@@ -62,6 +63,11 @@ class App extends Component {
         );
     }
 }
+
+App.propTypes = {
+    order: PropTypes.string.isRequired,
+    pageType: PropTypes.string.isRequired,
+};
 
 function mapStateToProps(state) {
     const {page} = state;

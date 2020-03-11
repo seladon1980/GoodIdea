@@ -24,7 +24,8 @@
     "css-loader": "latest",
     "style-loader": "latest",
     "classnames": "^2.1.5",
-    "todomvc-common": "^1.0.1"
+    "todomvc-common": "^1.0.1",
+    "prop-types": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",

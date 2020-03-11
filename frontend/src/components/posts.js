@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {destroy} from "../redux/actions";
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
 class Posts extends Component {
 
@@ -42,12 +43,17 @@ class Posts extends Component {
             </div>
         );
     }
-
 }
 
-function mapStateToProps(state) {
-    const {page} = state;
-    return page;
-}
+Posts.propTypes = {
+    blogData: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            like: PropTypes.number.isRequired,
+            status: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired
+        }).isRequired
+    ).isRequired,
+};
 
-export default connect(mapStateToProps)(Posts);
+export default Posts;

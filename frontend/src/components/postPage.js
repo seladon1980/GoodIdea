@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 import {fetchCardIfNeeded} from '../redux/actions'
 
 import Posts from './posts'
@@ -36,6 +37,18 @@ class PostPage extends Component {
         );
     }
 }
+
+PostPage.propTypes = {
+    isFetching: PropTypes.bool.isRequired,
+    blogData: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            like: PropTypes.number.isRequired,
+            status: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired
+        }).isRequired
+    ).isRequired,
+};
 
 function mapStateToProps(state) {
     const {page} = state;
